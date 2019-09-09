@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class='imageQuestion' id="askSection" class='mid-low'>
+	<div id='imgbox' class='middle'></div>
+	<div id='userInput' class='question lower'>
+		<div class='question-container'>
+			<h2 id="question"</h2>
+			<br>
+		</div>
+		<div class='ans-buttons' id='ask-btn'>
+			<button type='button' class='btn btn-info btn-md updateButton ans-btn' value="like">I Like It</button>
+			<button type='button' class='btn btn-info btn-md updateButton ans-btn' value="dislike">I Don't Like It</button>
+			<button type='button' class='btn btn-info btn-md updateButton ans-btn' value="no_opinion">I Don't know</button>
+		</div>
+	</div>
+</div>
+{% endblock %}
+{% block script %}
+<script type="text/javascript">
+	var url = '{{url}}';
+	var subject;
+	my_list = {{my_list | safe}};
+	var next_endpoint = '{{next_endpoint}}';
+	var i = 0;
+	var j = 0;
+	var fadeTime = 700;
+	var picture;
+
+document.addEventListener("DOMContentLoaded", function(){
+	loadQuestion();
+});
+
+$(document).ready(function() {
+
+    	$('.updateButton').on('click', function() {
+		var option = $(this).val();
+
+		req = $.ajax({
+			url : url,
+			type : 'POST',
+			data : {subject : subject, option : option}
+		});
+
+		if (i == my_list.length){
+			req.done(function(data) {
+				window.location = next_endpoint;
+			});
+		}
+		else{
+			loadQuestion();
+		}
+	});
+
+});
+
+</script>
+{% block extra_script %}{% endblock %}
+{% endblock %}

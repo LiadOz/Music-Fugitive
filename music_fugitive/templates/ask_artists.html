@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<form method="post">
+{% for artist in artists %}
+<h2>What do you think about {{artist}}</h2>
+	<input type="radio" name="{{artist}}-opinion" id="like" value="like"> like</input><br>
+	<input type="radio" name="{{artist}}-opinion" id="dislike" value="dislike"> dislike</input><br>
+	<input type="radio" name="{{artist}}-opinion" id="no_opinion" value="no_opinion"> no_opinion</input><br>
+{% endfor %}
+</form>
+{% endblock %}

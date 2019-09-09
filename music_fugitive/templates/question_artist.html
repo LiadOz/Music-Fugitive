@@ -1,0 +1,42 @@
+{% extends 'question.html' %}
+{% block extra_script %}
+<script type="text/javascript">
+var fadeFinished = true;
+var imageReady = true;
+function fadeSection(){
+	$('#ask-btn').children().prop('disabled', true);
+	$('#askSection').fadeOut(fadeTime).fadeIn(fadeTime);
+	fadeFinished = false;
+	setTimeout(function() {
+		$('#ask-btn').children().prop('disabled', false);
+		fadeFinished = true;
+		if (imageReady) {
+			$('#imgbox').html("<img src='" + picture + "'>");
+		}
+	}, fadeTime);
+}
+
+function loadQuestion(){
+	subject = my_list[i];
+	imageReady = false
+	$.get('/artist_picture/' + subject, function(data) {
+		picture = data.result;
+		imageReady = true
+		if (fadeFinished) {
+			$('#imgbox').html("<img src='" + picture + "'>");
+		}
+	});
+
+	if (i != 0){
+		fadeSection();
+		setTimeout(function() {
+			$('#question').text('What do you think about ' + subject);
+		}, fadeTime);
+	}
+	else {
+		$('#question').text('What do you think about ' + subject);
+	}
+	i++;
+}
+</script>
+{% endblock %}

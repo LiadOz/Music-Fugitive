@@ -1,0 +1,60 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+	height: 100vh;
+}
+.menu-container {
+  color: #fff;
+  background-color: #5995DA;  /* Blue */
+  padding: 20px 0;
+  
+
+  display: flex;
+  justify-content: center;
+  height: 20%;
+  max-height: 20%;
+}
+
+.menu {
+  width: 60%;
+
+
+  display: flex;
+  justify-content: space-between;
+}
+
+.links {
+
+  display: flex;
+  justify-content: flex-end;
+}
+
+.login {
+	margin-left: 30px;
+}
+
+.header-container {
+  color: #5995DA;
+  background-color: #D6E9FE;
+  display: flex;
+  justify-content: center;
+  height: 60%;
+  max-height: 60%;
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+//overflow: hidden;
+}
+
+.logo img {
+	display: block;
+	max-width: 100%;
+	max-height: 100%;
+}

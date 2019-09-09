@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1 align='center'>Here are your top suggestions:</h1>
+<br>
+{% for sugg in suggestions %}
+	<div class='sugg-container'>
+		<h2>{{ sugg['artist'] }}</h2>
+		<h4>This artist is similar to {{ sugg['reason'] }}</h4>
+		<img class='t-image' id='{{ sugg['artist'] }}'>
+		<br>
+	</div>
+{% endfor %}
+
+{% endblock %}
+{% block script %}
+<script type="text/javascript">
+// Used to load artists images
+$(document).ready( function(){
+	$('img').each( function() {
+		var img = $(this);
+		$.get('/artist_picture/' + $(this).attr('id'), function(data) {
+			picture = data.result;
+			$(img).attr('src', picture);
+			$(img).attr('alt', $(img).attr('id') + ' Picture');
+		});
+	});
+});
+</script>
+{% endblock %}

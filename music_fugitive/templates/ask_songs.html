@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<form method="post">
+{% for artist, songs in top_songs.items() %}
+<h2>What do you think about the following songs from {{artist}}</h2>
+{% if songs %}
+	{% for song in songs %}
+	<h5>What do you think about {{song}}</h5>
+	<input type="radio" name="{{artist}}-{{song}}-opinion" id="like" value="like"> like</input><br>
+	<input type="radio" name="{{artist}}-{{song}}-opinion" id="dislike" value="dislike"> dislike</input><br>
+	<input type="radio" name="{{artist}}-{{song}}-opinion" id="no_opinion" value="no_opinion"> no_opinion</input><br>
+	{% endfor %}
+{% endif %}
+{% endfor %}
+<input type="submit" name="submit" value="submit"> 
+</form>
+{% endblock %}

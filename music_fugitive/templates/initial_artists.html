@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<form method="POST">
+<div class='middle form-group'>
+	<h2>Input up to 3 artists you like</h2>
+	{% from '_formhelpers.html' import render_field %}
+	{{ form.hidden_tag() }}
+	{{ render_field(form.artist_1) }}
+	{{ render_field(form.artist_2) }}
+	{{ render_field(form.artist_3) }}
+	<input class='btn btn-primary btn-lg ask-submit' type='submit' value='Submit'>
+</div>
+</form>
+{% endblock %}

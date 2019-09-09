@@ -1,0 +1,51 @@
+{% extends 'question.html' %}
+{% block extra_script %}
+<script type="text/javascript">
+var fadeFinished = true;
+var imageReady = true;
+function fadeSection(fadeAll = false){
+	if (fadeAll){
+		$('#askSection').fadeOut(fadeTime).fadeIn(fadeTime);
+		return
+	}
+	$('#ask-btn').children().prop('disabled', true);
+	$('#userInput').fadeOut(fadeTime).fadeIn(fadeTime);
+	fadeFinished = false;
+	setTimeout(function() {
+		$('#ask-btn').children().prop('disabled', false);
+		fadeFinished = true;
+		if (imageReady) {
+			$('#imgbox').html("<img src='" + picture + "'>");
+		}
+	}, fadeTime);
+}
+
+function loadQuestion(){
+	var fadeAll = false
+	imageReady = false
+	if (j == 0){
+		fadeAll = true
+	}
+	fadeSection(fadeAll);
+	var artist = my_list[i][0];
+	var song = my_list[i][1][j];
+	$.get('/artist_picture/' + artist, function(data) {
+		picture = data.result;
+		imageReady = true
+		if (fadeFinished) {
+			$('#imgbox').html("<img src='" + picture + "'>");
+		}
+	});
+    	setTimeout(function () {
+		$('#question').html('What do you think about the following song:' + " <br/>" + song + ' by ' + artist);
+    	}, fadeTime);
+	subject = artist + '_' + song;
+	j++;
+	if (j == my_list[i][1].length){
+		i++;
+		j = 0;
+	}
+
+}
+</script>
+{% endblock %}
