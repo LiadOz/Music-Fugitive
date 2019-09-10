@@ -10,4 +10,8 @@ app.config['SECRET_KEY'] = os.urandom(24)
 app.config.from_object(__name__)
 Session(app)
 
-import music_fugitive.views
+from music_fugitive.post.routes import post
+from music_fugitive.main.routes import main
+
+app.register_blueprint(post)
+app.register_blueprint(main)
