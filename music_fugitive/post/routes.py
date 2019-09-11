@@ -1,5 +1,5 @@
 from flask import Blueprint, request, session, jsonify, url_for
-from music_fugitive import spotify
+from music_fugitive.spotify import Spot
 
 post = Blueprint('post', __name__)
 
@@ -33,7 +33,9 @@ def update_song():
 
 @post.route('/artist_picture/<artist_name>', methods=['GET'])
 def artist_picture(artist_name):
-    pic = spotify.get_artist_picture(artist_name)
+    if not session.get('spot'):
+        session['spot'] = Spot()
+    pic = session['spot'].get_artist_picture(artist_name)
     if not pic:
         pic = url_for('static', filename='images/artist_not_found.png')
     return jsonify(result=pic)

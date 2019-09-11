@@ -1,62 +1,66 @@
 import requests
 import base64
 from time import time
+import os
+from functools import wraps
 
-client_id = '0995c419e0b94ba6a828cdd763aec133'
-client_secret = '3de7339b9b2642bebf8b1b5d75de17a8'
-
-token = None
-headers = None
-expire = 0
-
-def set_token():
-    global expire
-    global token
-    global headers
-    endpoint = 'https://accounts.spotify.com/api/token'
-    secret = client_id + ':' + client_secret
-    authorization = 'Basic ' + base64.b64encode(secret.encode()).decode()
-    post = {'grant_type': 'client_credentials'}
-    headers = {'Authorization': authorization}
-    r = requests.post(endpoint, headers=headers, data=post)
-    resp = r.json()
-
-    expire = time() + resp['expires_in']
-    token = resp['access_token']
-    headers = {'Authorization': 'Bearer ' + token}
-    return
+CLIENT_ID = os.environ.get('SPOTIFY_CLIENT_ID')
+CLIENT_SECRET = os.environ.get('SPOTIFY_CLIENT_SECRET')
 
 
-def valid_token(f):
-    def wrapper(args):
-        if time() > expire:
-            print('Requsting new token')
-            set_token()
+class Spot():
 
-        return f(args)
+    def __init__(self):
+        self.token = None
+        self.headers = None
+        self.expire = 0
+        secret = (CLIENT_ID + ':' + CLIENT_SECRET).encode()
+        self.authorization = 'Basic ' + base64.b64encode(secret).decode()
 
-    return wrapper
+    def set_token(self):
+        endpoint = 'https://accounts.spotify.com/api/token'
+        post = {'grant_type': 'client_credentials'}
+        headers = {'Authorization': self.authorization}
+        resp = requests.post(endpoint, headers=headers, data=post).json()
 
+        self.token = resp['access_token']
+        self.headers = {'Authorization': 'Bearer ' + self.token}
+        self.expire = time() + resp['expires_in']
 
-@valid_token
-def search_artist(artist_name):
-    endpoint = 'https://api.spotify.com/v1/search'
-    params = {'q': artist_name, 'type': 'artist', 'limit':1}
-    r = requests.get(endpoint, headers=headers, params=params)
-    if not r.json()['artists']['items']:
-        return ''
-    return r.json()['artists']['items'][0]['id']
+    def valid_token(f):
+        """
+        Makes sure the token is always valid
+        """
+        @wraps(f)
+        def wrap(self, args):
+            if time() > self.expire:
+                print('Requsting new token')
+                self.set_token()
 
+            return f(self, args)
 
-@valid_token
-def get_artist_picture(artist_name):
-    artist_id = search_artist(artist_name)
-    if not artist_id:
-        return ''
-    endpoint = 'https://api.spotify.com/v1/artists/' + artist_id
-    r = requests.get(endpoint , headers=headers)
-    return r.json()['images'][0]['url']
+        return wrap
 
+    @valid_token
+    def search_artist(self, artist_name):
+        """
+        Searched artist spotify id using the artist name
+        """
+        endpoint = 'https://api.spotify.com/v1/search'
+        params = {'q': artist_name, 'type': 'artist', 'limit': 1}
+        r = requests.get(endpoint, headers=self.headers, params=params)
+        if not r.json()['artists']['items']:
+            return ''
+        return r.json()['artists']['items'][0]['id']
 
-g = get_artist_picture
-from pprint import pprint as p
+    @valid_token
+    def get_artist_picture(self, artist_name):
+        """
+        Uses artist Spotify id to find it's image
+        """
+        artist_id = self.search_artist(artist_name)
+        if not artist_id:
+            return ''
+        endpoint = 'https://api.spotify.com/v1/artists/' + artist_id
+        r = requests.get(endpoint, headers=self.headers)
+        return r.json()['images'][0]['url']
