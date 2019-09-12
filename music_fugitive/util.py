@@ -32,7 +32,7 @@ def merge_dicts(f, *args):
     Returns merged dictionary from multiple dictionaries
     according to function f.
     If f is None the last value encountered will be set to the key.
-    the first dictionary is changed if it is defaultdict.
+    The first dictionary is changed if it is defaultdict.
     """
     if f is None:
         def f(x, y): return y
