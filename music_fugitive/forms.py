@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from music_fugitive.last import artist_exists
+from .last import artist_exists
 from wtforms import StringField
 from wtforms.validators import DataRequired
 from wtforms import ValidationError

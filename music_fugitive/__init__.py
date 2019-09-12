@@ -17,7 +17,7 @@ def create_app():
 
 
 def register_blueprints(app, url_prefix='/'):
-    from music_fugitive.post.routes import post
-    from music_fugitive.main.routes import main
+    from .post.routes import post
+    from .main.routes import main
     app.register_blueprint(post, url_prefix=url_prefix)
     app.register_blueprint(main, url_prefix=url_prefix)
