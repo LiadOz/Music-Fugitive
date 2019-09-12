@@ -1,6 +1,6 @@
 import requests
 import os
-from .util import nested_dict_get
+from music_fugitive.util import nested_dict_get
 
 
 key = os.environ.get('LASTFM_KEY')

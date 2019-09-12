@@ -1,6 +1,6 @@
 from flask import Blueprint, session, redirect, url_for, render_template
-from .classes import artist_tracker
-from .forms import artist_form
+from music_fugitive.classes import artist_tracker
+from music_fugitive.forms import artist_form
 from string import capwords
 from functools import wraps
 

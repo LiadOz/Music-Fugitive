@@ -1,5 +1,5 @@
 from flask import Blueprint, request, session, jsonify, url_for
-from .spotify import Spot
+from music_fugitive.spotify import Spot
 
 post = Blueprint('post', __name__)
 

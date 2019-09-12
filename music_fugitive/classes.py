@@ -1,7 +1,8 @@
-from .last import (get_similar, get_artist_songs, get_artist_genres,
-                   get_song_genres, artist_exists)
+from music_fugitive.last import (get_similar, get_artist_songs,
+                                 get_artist_genres, get_song_genres,
+                                 artist_exists)
 from collections import defaultdict
-from .util import merge_dicts
+from music_fugitive.util import merge_dicts
 from operator import itemgetter
 
 
